@@ -11,8 +11,6 @@ public class ActivityDto {
 
     private String name;
 
-    private Double metValue;
-
     private Double caloriesBurned;
 
 }

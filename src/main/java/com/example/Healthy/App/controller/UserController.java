@@ -1,6 +1,8 @@
 package com.example.Healthy.App.controller;
 import com.example.Healthy.App.dto.UserDietDto;
 import com.example.Healthy.App.dto.UserDto;
+import com.example.Healthy.App.dto.request.ProfileForm;
+import com.example.Healthy.App.dto.request.UpdateProfileForm;
 import com.example.Healthy.App.service.UserDietService;
 import com.example.Healthy.App.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,10 +32,14 @@ public class UserController {
     public ResponseEntity<UserDto> getUserById(@PathVariable Integer id){
         return ResponseEntity.ok(userService.getUserByID(id));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto){
-        UserDto updatedUser = userService.updateUser(id, userDto);
-        return ResponseEntity.ok(updatedUser);
+    @PutMapping()
+    public ResponseEntity<String> updateUser(@RequestParam(name = "email") String email, @RequestBody UserDto form){
+        userService.updateUser(email, form);
+        return ResponseEntity.ok("Update thành công");
+    }
+    @GetMapping("/getInfor")
+    public  ResponseEntity<ProfileForm> getInforByEmail(@RequestParam String email){
+        return ResponseEntity.ok(userService.getInforByEmail(email));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id){
