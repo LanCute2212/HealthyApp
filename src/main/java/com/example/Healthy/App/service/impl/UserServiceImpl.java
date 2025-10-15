@@ -3,6 +3,8 @@ package com.example.Healthy.App.service.impl;
 import com.example.Healthy.App.dto.LoginRequestDto;
 import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
+import com.example.Healthy.App.dto.request.ProfileForm;
+import com.example.Healthy.App.dto.request.UpdateProfileForm;
 import com.example.Healthy.App.mapper.UserMapper;
 import com.example.Healthy.App.model.Role;
 import com.example.Healthy.App.model.User;
@@ -35,7 +37,25 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toDto)
                 .orElseThrow(()-> new RuntimeException("User not found"));
     }
+    @Override
+    public ProfileForm getInforByEmail(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
+        ProfileForm response = new ProfileForm();
+
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setAge(user.getAge());
+        response.setGender(user.getGender());
+        response.setWeight(user.getWeight());
+        response.setHeight(user.getHeight());
+        response.setActivityLevel(user.getLevelActivity());
+        response.setGoal(user.getGoal());
+        response.setBmi(user.getBmi());
+        response.setBmr(user.getBmr());
+        response.setTdee(user.getTdee());
+        return response;
+    }
     @Override
     public UserDto createUser(RegisterDto registerDto) {
         Optional<User> u = userRepository.findByEmail(registerDto.getEmail());
@@ -52,9 +72,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(Integer id, UserDto userDto) {
+    public UserDto updateUser(String email, UserDto userDto) {
         calculate(userDto);
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
         userMapper.updateUserFromDto(userDto, user);
         User updatedUser = userRepository.save(user);
         return userMapper.toDto(updatedUser);
@@ -83,13 +103,14 @@ public class UserServiceImpl implements UserService {
         userDto.setBmi(bmi);
     }
     @Override
-    public UserDto loginUser(LoginRequestDto loginRequestDto){
+    public String loginUser(LoginRequestDto loginRequestDto){
         Optional<User> u = userRepository.findByEmail(loginRequestDto.getEmail());
         if(!u.isPresent()){
             throw new RuntimeException("Email not exist");
         }
         if(u.get().getPassword().equals(loginRequestDto.getPassword())){
-            return userMapper.toDto(u.get());
+            userMapper.toDto(u.get());
+            return "Login successfully";
         }
         throw new RuntimeException("Password incorrect");
     }
