@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 public class UpdateProfileForm {
     private Double age;
-    private String gender;
+    private boolean gender;
     private double weight;
     private double height;
     private Double activityLevel;
