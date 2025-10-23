@@ -1,6 +1,8 @@
 package com.example.Healthy.App.controller;
 
 import com.example.Healthy.App.dto.ActivityLogDto;
+import com.example.Healthy.App.dto.request.LogActivityRequest;
+import com.example.Healthy.App.dto.request.UpdateActivityLogRequest;
 import com.example.Healthy.App.service.ActivityLogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,8 @@ public class ActivityLogController {
 
 
     @PostMapping
-    public ResponseEntity<ActivityLogDto> createActivityLog(@RequestBody ActivityLogDto activityLogDto) {
-        ActivityLogDto createdActivityLog = activityLogService.createActivityLog(activityLogDto);
+    public ResponseEntity<ActivityLogDto> createActivityLog(@RequestBody LogActivityRequest requestDto) {
+        ActivityLogDto createdActivityLog = activityLogService.createActivityLog(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdActivityLog);
     }
 
@@ -39,8 +41,8 @@ public class ActivityLogController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityLogDto> updateActivityLog(@PathVariable Integer id, @RequestBody ActivityLogDto activityLogDto) {
-        ActivityLogDto updatedActivityLog = activityLogService.updateActivityLog(id, activityLogDto);
+    public ResponseEntity<ActivityLogDto> updateActivityLog(@PathVariable Integer id, @RequestBody UpdateActivityLogRequest updateDto) {
+        ActivityLogDto updatedActivityLog = activityLogService.updateActivityLog(id, updateDto);
         return ResponseEntity.ok(updatedActivityLog);
     }
     @DeleteMapping("/{id}")

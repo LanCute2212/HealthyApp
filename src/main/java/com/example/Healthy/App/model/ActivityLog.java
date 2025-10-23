@@ -16,11 +16,14 @@ public class ActivityLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logid;
 
-    @Column(name ="duration")
-    private Double duration;
+    @Column(name ="durationMinutes")
+    private Double durationMinutes;
 
-    @Column(name = "dateLog")
-    private LocalDateTime dateLog;
+    @Column(name = "logDate")
+    private LocalDateTime logDate;
+
+    @Column(name = "caloriesBurned")
+    private Double caloriesBurned;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -11,9 +11,15 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class ActivityLogDto {
-    private Integer logID;
+    private UserDto userDto;
 
-    private Double duration;
+    private ActivityDto activityDto;
 
-    private LocalDateTime dateLog;
+    private Integer logId;
+
+    private Double durationMinutes;
+
+    private LocalDateTime logDate;
+
+    private Double caloriesBurned;
 }
