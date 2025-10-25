@@ -1,10 +1,10 @@
 package com.example.Healthy.App.controller;
 
 import com.example.Healthy.App.dto.TrainingModeDto;
+import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.TrainingModeService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,25 +18,52 @@ public class TrainingModeController {
         this.trainingModeService = trainingModeService;
     }
     @PostMapping
-    public ResponseEntity<TrainingModeDto> createTrainingMode(@RequestBody TrainingModeDto trainingModeDto){
+    public BaseResponse<TrainingModeDto> createTrainingMode(@RequestBody TrainingModeDto trainingModeDto){
         TrainingModeDto createdMode = trainingModeService.createMode(trainingModeDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdMode);
+        return BaseResponse.<TrainingModeDto>builder()
+                .status(HttpStatus.CREATED.value())
+                .error(false)
+                .message("Training mode created")
+                .data(createdMode)
+                .build();
     }
     @GetMapping
-    public ResponseEntity<List<TrainingModeDto>> getAllModes(){
-        return ResponseEntity.ok(trainingModeService.getAllModes());
+    public BaseResponse<List<TrainingModeDto>> getAllModes(){
+        List<TrainingModeDto> modes = trainingModeService.getAllModes();
+        return BaseResponse.<List<TrainingModeDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(modes)
+                .build();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<TrainingModeDto> getModeById(@PathVariable Integer id){
-        return  ResponseEntity.ok(trainingModeService.getModeByID(id));
+    public BaseResponse<TrainingModeDto> getModeById(@PathVariable Integer id){
+        TrainingModeDto mode = trainingModeService.getModeByID(id);
+        return BaseResponse.<TrainingModeDto>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(mode)
+                .build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<TrainingModeDto> updateMode(@PathVariable Integer id, @RequestBody TrainingModeDto trainingModeDto){
+    public BaseResponse<TrainingModeDto> updateMode(@PathVariable Integer id, @RequestBody TrainingModeDto trainingModeDto){
         TrainingModeDto updatedMode = trainingModeService.updateMode(id, trainingModeDto);
-        return ResponseEntity.ok(updatedMode);
+        return BaseResponse.<TrainingModeDto>builder()
+                .status(Status.UPDATED.getStatus())
+                .error(false)
+                .message(Status.UPDATED.getMessage())
+                .data(updatedMode)
+                .build();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMode(@PathVariable Integer id){
-        return ResponseEntity.ok("Deleted mode with id: "+ id);
+    public BaseResponse deleteMode(@PathVariable Integer id){
+        trainingModeService.deleteMode(id); // Thêm dòng gọi service
+        return BaseResponse.builder()
+                .status(Status.DELETED.getStatus())
+                .error(false)
+                .message(Status.DELETED.getMessage())
+                .build();
     }
 }

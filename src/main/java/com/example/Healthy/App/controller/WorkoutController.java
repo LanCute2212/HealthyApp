@@ -1,9 +1,10 @@
 package com.example.Healthy.App.controller;
+
 import com.example.Healthy.App.dto.WorkoutDto;
+import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.WorkoutService;
-import org.hibernate.Internal;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +18,52 @@ public class WorkoutController {
         this.workoutService = workoutService;
     }
     @PostMapping
-    public ResponseEntity<WorkoutDto> createWorkout(@RequestBody WorkoutDto workoutDto){
+    public BaseResponse<WorkoutDto> createWorkout(@RequestBody WorkoutDto workoutDto){
         WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(createdWorkout);
+        return BaseResponse.<WorkoutDto>builder()
+                .status(HttpStatus.CREATED.value())
+                .error(false)
+                .message("Workout created")
+                .data(createdWorkout)
+                .build();
     }
     @GetMapping
-    public ResponseEntity<List<WorkoutDto>> getAllWorkouts(){
-        return ResponseEntity.ok(workoutService.getAllWorkouts());
+    public BaseResponse<List<WorkoutDto>> getAllWorkouts(){
+        List<WorkoutDto> workouts = workoutService.getAllWorkouts();
+        return BaseResponse.<List<WorkoutDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(workouts)
+                .build();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<WorkoutDto> getWorkoutById(@PathVariable Integer id){
-        return ResponseEntity.ok(workoutService.getWorkoutById(id));
+    public BaseResponse<WorkoutDto> getWorkoutById(@PathVariable Integer id){
+        WorkoutDto workout = workoutService.getWorkoutById(id);
+        return BaseResponse.<WorkoutDto>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(workout)
+                .build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<WorkoutDto> updateWorkout(@PathVariable Integer id, @RequestBody WorkoutDto workoutDto){
+    public BaseResponse<WorkoutDto> updateWorkout(@PathVariable Integer id, @RequestBody WorkoutDto workoutDto){
         WorkoutDto updatedWorkout = workoutService.updateWorkout(id, workoutDto);
-        return ResponseEntity.ok(updatedWorkout);
+        return BaseResponse.<WorkoutDto>builder()
+                .status(Status.UPDATED.getStatus())
+                .error(false)
+                .message(Status.UPDATED.getMessage())
+                .data(updatedWorkout)
+                .build();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteWorkout(@PathVariable Integer id){
+    public BaseResponse deleteWorkout(@PathVariable Integer id){
         workoutService.deleteWorkout(id);
-        return ResponseEntity.ok("Deleted workout with ID: "+id);
+        return BaseResponse.builder()
+                .status(Status.DELETED.getStatus())
+                .error(false)
+                .message(Status.DELETED.getMessage())
+                .build();
     }
-
 }

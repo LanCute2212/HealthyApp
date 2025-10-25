@@ -31,21 +31,13 @@ public class UserDietServiceImpl implements UserDietService {
 
     @Override
     public UserDietDto getUserDietByUserID(Integer id) {
-//        UserDiet diet = userDietRepository.findByUserId(id).get();
-////                .map(userDietMapper::toDto)
-////                .orElseThrow(()-> new RuntimeException("User Diet not found"));
-//
-//        System.out.println(dietDto.getUserDto());
-
         User u = new User();
         u.setId(id);
         Optional<UserDiet> x = userDietRepository.findByUser(u);
         if (x.isPresent()) {
             return x.map(userDietMapper::toDto)
-                .orElseThrow(()-> new RuntimeException("User Diet not found"));
+                    .orElseThrow(()-> new RuntimeException("User Diet not found"));
         }
-//                .map(userDietMapper::toDto)
-//                .orElseThrow(()-> new RuntimeException("User Diet not found"));
         return null;
     }
 

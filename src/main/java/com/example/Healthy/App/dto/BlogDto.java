@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class BlogDto {
-    private Integer id;
 
     private String title;
 

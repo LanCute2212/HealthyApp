@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 public class TrainingModeDto {
-    private Integer id;
 
     private String name;
 
