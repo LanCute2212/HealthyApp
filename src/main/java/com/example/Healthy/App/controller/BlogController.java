@@ -1,10 +1,10 @@
 package com.example.Healthy.App.controller;
 
 import com.example.Healthy.App.dto.BlogDto;
+import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.BlogService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,26 +19,52 @@ public class BlogController {
     }
 
     @PostMapping
-    public ResponseEntity<BlogDto> createBlog(@RequestBody BlogDto blogDto){
+    public BaseResponse<BlogDto> createBlog(@RequestBody BlogDto blogDto){
         BlogDto createdBlog = blogService.createBlog(blogDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBlog);
+        return BaseResponse.<BlogDto>builder()
+                .status(HttpStatus.CREATED.value())
+                .error(false)
+                .message("Blog created")
+                .data(createdBlog)
+                .build();
     }
     @GetMapping
-    public ResponseEntity<List<BlogDto>> getAllBlogs(){
-        return  ResponseEntity.ok(blogService.getAllBlogs());
+    public BaseResponse<List<BlogDto>> getAllBlogs(){
+        List<BlogDto> blogs = blogService.getAllBlogs();
+        return BaseResponse.<List<BlogDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(blogs)
+                .build();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<BlogDto> getBlogById(@PathVariable Integer id){
-        return  ResponseEntity.ok(blogService.getBlogByID(id));
+    public BaseResponse<BlogDto> getBlogById(@PathVariable Integer id){
+        BlogDto blog = blogService.getBlogByID(id);
+        return BaseResponse.<BlogDto>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(blog)
+                .build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<BlogDto> updateBlog(@PathVariable Integer id, @RequestBody BlogDto blogDto){
+    public BaseResponse<BlogDto> updateBlog(@PathVariable Integer id, @RequestBody BlogDto blogDto){
         BlogDto updatedBlog = blogService.updateBlog(id, blogDto);
-        return ResponseEntity.ok(updatedBlog);
+        return BaseResponse.<BlogDto>builder()
+                .status(Status.UPDATED.getStatus())
+                .error(false)
+                .message(Status.UPDATED.getMessage())
+                .data(updatedBlog)
+                .build();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBlog(@PathVariable Integer id){
-        return ResponseEntity.ok("Deleted blog with id: " +id);
+    public BaseResponse deleteBlog(@PathVariable Integer id){
+        blogService.deleteBlog(id);
+        return BaseResponse.builder()
+                .status(Status.DELETED.getStatus())
+                .error(false)
+                .message(Status.DELETED.getMessage())
+                .build();
     }
-
 }

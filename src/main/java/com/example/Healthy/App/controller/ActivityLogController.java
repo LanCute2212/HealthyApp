@@ -3,9 +3,10 @@ package com.example.Healthy.App.controller;
 import com.example.Healthy.App.dto.ActivityLogDto;
 import com.example.Healthy.App.dto.request.LogActivityRequest;
 import com.example.Healthy.App.dto.request.UpdateActivityLogRequest;
+import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.ActivityLogService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,34 +21,61 @@ public class ActivityLogController {
         this.activityLogService = activityLogService;
     }
 
-
     @PostMapping
-    public ResponseEntity<ActivityLogDto> createActivityLog(@RequestBody LogActivityRequest requestDto) {
+    public BaseResponse<ActivityLogDto> createActivityLog(@RequestBody LogActivityRequest requestDto) {
         ActivityLogDto createdActivityLog = activityLogService.createActivityLog(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdActivityLog);
+        return BaseResponse.<ActivityLogDto>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Activity log created")
+                .error(false)
+                .data(createdActivityLog)
+                .build();
     }
 
 
     @GetMapping
-    public ResponseEntity<List<ActivityLogDto>> getAllActivityLogs() {
+    public BaseResponse<List<ActivityLogDto>> getAllActivityLogs() {
         List<ActivityLogDto> activityLogs = activityLogService.getAllActivityLogs();
-        return ResponseEntity.ok(activityLogs);
+        return BaseResponse.<List<ActivityLogDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(activityLogs)
+                .build();
     }
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityLogDto> getActivityLogById(@PathVariable Integer id) {
+    public BaseResponse<ActivityLogDto> getActivityLogById(@PathVariable Integer id) {
         ActivityLogDto activityLog = activityLogService.getActivityLogByID(id);
-        return ResponseEntity.ok(activityLog);
+        return BaseResponse.<ActivityLogDto>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message(".")
+                .data(activityLog)
+                .build();
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityLogDto> updateActivityLog(@PathVariable Integer id, @RequestBody UpdateActivityLogRequest updateDto) {
+    public BaseResponse<ActivityLogDto> updateActivityLog(@PathVariable Integer id, @RequestBody UpdateActivityLogRequest updateDto) {
         ActivityLogDto updatedActivityLog = activityLogService.updateActivityLog(id, updateDto);
-        return ResponseEntity.ok(updatedActivityLog);
+        return BaseResponse.<ActivityLogDto>builder()
+                .status(Status.UPDATED.getStatus())
+                .error(false)
+                .message(Status.UPDATED.getMessage())
+                .data(updatedActivityLog)
+                .build();
     }
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteActivityLog(@PathVariable Integer id) {
+    public BaseResponse deleteActivityLog(@PathVariable Integer id) {
         activityLogService.deleteActivityLog(id);
-        return ResponseEntity.ok("Deleted activity log with ID: " + id);
+        return BaseResponse.builder()
+                .status(Status.DELETED.getStatus())
+                .error(false)
+                .message(Status.DELETED.getMessage())
+                .build();
     }
 }

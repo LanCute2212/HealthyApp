@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class WorkoutDto {
-    private Integer id;
 
     private String name;
 

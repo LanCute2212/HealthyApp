@@ -62,9 +62,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updateProfile(String email, UpdateProfileForm form) {
     User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
     UserDto dto = userMapper.toDto(user);
-
     dto.setGender(form.isGender());
 
     dto.setWeight(form.getWeight());
