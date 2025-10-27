@@ -5,6 +5,7 @@ import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
 import com.example.Healthy.App.dto.request.ProfileForm;
 import com.example.Healthy.App.dto.request.UpdateProfileForm;
+import com.example.Healthy.App.dto.response.LoginResponse;
 import com.example.Healthy.App.mapper.UserMapper;
 import com.example.Healthy.App.model.Role;
 import com.example.Healthy.App.model.User;
@@ -131,14 +132,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String loginUser(LoginRequestDto loginRequestDto) {
+  public LoginResponse loginUser(LoginRequestDto loginRequestDto) {
     Optional<User> u = userRepository.findByEmail(loginRequestDto.getEmail());
     if (!u.isPresent()) {
       throw new RuntimeException("Email not exist");
     }
     if (u.get().getPassword().equals(loginRequestDto.getPassword())) {
       userMapper.toDto(u.get());
-      return "Login successfully";
+
+      return LoginResponse.builder()
+          .userId(u.get().getId())
+          .email(u.get().getEmail())
+          .build();
     }
     throw new RuntimeException("Password incorrect");
   }
