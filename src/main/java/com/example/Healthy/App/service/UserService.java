@@ -5,6 +5,7 @@ import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
 import com.example.Healthy.App.dto.request.ProfileForm;
 import com.example.Healthy.App.dto.request.UpdateProfileForm;
+import com.example.Healthy.App.dto.response.LoginResponse;
 import java.util.List;
 
 public interface UserService {
@@ -19,7 +20,7 @@ public interface UserService {
 
   void deleteUser(Integer id);
 
-  String loginUser(LoginRequestDto loginRequestDto);
+  LoginResponse loginUser(LoginRequestDto loginRequestDto);
 
   ProfileForm getInforByEmail(String email);
 

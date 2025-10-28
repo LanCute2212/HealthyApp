@@ -1,42 +1,34 @@
 package com.example.Healthy.App.controller;
 
 import com.example.Healthy.App.dto.LoginRequestDto;
-import com.example.Healthy.App.dto.UserDto;
-import com.example.Healthy.App.dto.response.BaseResponse; // Thêm
-import com.example.Healthy.App.model.User;
+import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.dto.response.LoginResponse;
 import com.example.Healthy.App.service.UserService;
-// import org.apache.coyote.Response; // Xóa
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus; // Thêm
-// import org.springframework.http.ResponseEntity; // Xóa
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
-    private UserService userService;
-    public LoginController(UserService userService){
-        this.userService = userService;
-    }
 
-    @PostMapping
-    public BaseResponse<Object> login(@RequestBody LoginRequestDto loginRequestDto){
-        String loginMessage = userService.loginUser(loginRequestDto);
+  private UserService userService;
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("email", loginRequestDto.getEmail());
+  public LoginController(UserService userService) {
+    this.userService = userService;
+  }
 
-        return BaseResponse.builder()
-                .status(HttpStatus.OK.value())
-                .error(false)
-                .message(loginMessage)
-                .data(data)
-                .build();
-    }
+  @PostMapping
+  public BaseResponse<LoginResponse> login(@RequestBody LoginRequestDto loginRequestDto) {
+    LoginResponse data = userService.loginUser(loginRequestDto);
+
+    return BaseResponse.<LoginResponse>builder()
+        .status(HttpStatus.OK.value())
+        .error(false)
+        .message("Login successfully")
+        .data(data)
+        .build();
+  }
 }
