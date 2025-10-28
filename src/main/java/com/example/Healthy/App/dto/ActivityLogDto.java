@@ -1,6 +1,5 @@
 package com.example.Healthy.App.dto;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDateTime;

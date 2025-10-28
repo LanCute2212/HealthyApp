@@ -74,7 +74,7 @@ public class UserController {
             .build();
   }
 
-  @PutMapping("/updateProfile")
+  @PostMapping("/updateProfile")
   public BaseResponse<Object> updateProfile(@RequestParam String email,
                                             @RequestBody UpdateProfileForm form) {
     userService.updateProfile(email, form);
