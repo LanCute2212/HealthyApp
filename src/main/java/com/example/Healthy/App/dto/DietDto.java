@@ -15,7 +15,7 @@ public class DietDto {
 
     private int carbPercent;
 
-    private int farPercent;
+    private int fatPercent;
 
     private int proteinPercent;
 }
