@@ -17,6 +17,8 @@ public class DietServiceImpl implements DietService {
     private final DietRepository dietRepository;
     @Override
     public List<DietDto> getAllDiets() {
+        List<Diet> list = dietRepository.findAll();
+
         return dietRepository.findAll()
                 .stream()
                 .map(dietMapper::toDto)
