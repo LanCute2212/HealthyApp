@@ -8,6 +8,7 @@ import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.ActivityService;
 import com.example.Healthy.App.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ActivityController {
         this.activityService = activityService;
         this.userService = userService;
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
     public BaseResponse createActivity(@RequestBody CreateActivityRequest createActivityRequest){
         ActivityDto createdActivity = activityService.createActivity(createActivityRequest);

@@ -1,6 +1,6 @@
 package com.example.Healthy.App.service.impl;
 
-import com.example.Healthy.App.dto.LoginRequestDto;
+import com.example.Healthy.App.dto.request.LoginRequestDto;
 import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
 import com.example.Healthy.App.dto.request.ProfileForm;
@@ -11,6 +11,8 @@ import com.example.Healthy.App.model.Role;
 import com.example.Healthy.App.model.User;
 import com.example.Healthy.App.repository.UserRepository;
 import com.example.Healthy.App.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -94,7 +96,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(registerDto.getName());
         user.setEmail(registerDto.getEmail());
-        user.setPassword(registerDto.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         user.setRole(new Role(1, null, null));
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);

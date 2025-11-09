@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name ="role")
 public class Role {
     @Id
@@ -21,5 +20,6 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @ToString.Exclude
     private List<User> user;
 }
