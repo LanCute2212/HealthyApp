@@ -32,7 +32,7 @@ public class Dish {
     private Double fiber;
 
     @Column(name = "foodPicture")
-    private String foodPicture;
+    private String imageUrl;
 
     @Column(name = "calories")
     private Double calories;
@@ -42,6 +42,12 @@ public class Dish {
 
     @Column(name = "unit")
     private Unit unit;
+
+    @Column(unique = true)
+    private String barcode;
+
+    @Column(name = "servingSize")
+    private String servingSize;
 
     @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL)
     private List<MealDetail> mealDetails;

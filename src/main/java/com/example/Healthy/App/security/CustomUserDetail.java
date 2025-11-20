@@ -42,7 +42,6 @@ public class CustomUserDetail implements UserDetails{
         List<Role> roles = new ArrayList<>();
         roles.add(user.getRole());
         List<GrantedAuthority> authorities = roles.stream()
-                // --- SỬA Ở ĐÂY ---
                 .map(role -> new SimpleGrantedAuthority(role.getName())) // Đổi từ role.toString() thành role.getName()
                 .collect(Collectors.toList());
         return new CustomUserDetail(user.getId(), user.getEmail(), user.getPassword(), authorities);

@@ -17,6 +17,7 @@ public class UserDietController {
         this.userDietService= userDietService;
     }
 
+
     @PostMapping
     public BaseResponse<UserDietDto> createUserDiet(@RequestBody UserDietDto userDietDto){
         UserDietDto createdUserDiet = userDietService.createUserDiet(userDietDto);

@@ -50,19 +50,22 @@ public class UserServiceImpl implements UserService {
 
         ProfileForm response = new ProfileForm();
 
-        response.setName(user.getName());
+        response.setName(user.getName() != null ? user.getName() : "");
         response.setEmail(user.getEmail());
-        response.setAge(user.getAge());
-        response.setGender(user.getGender());
-        response.setWeight(user.getWeight());
-        response.setHeight(user.getHeight());
-        response.setActivityLevel(user.getLevelActivity());
-        response.setGoal(user.getGoal());
-        response.setBmi(user.getBmi());
-        response.setBmr(user.getBmr());
-        response.setTdee(user.getTdee());
+        response.setAge(user.getAge() != null ? user.getAge() : 0);
+        response.setGender(user.getGender() != null ? user.getGender() : "");
+        response.setWeight(user.getWeight() != null ? user.getWeight() : 0.0);
+        response.setHeight(user.getHeight() != null ? user.getHeight() : 0.0);
+        response.setActivityLevel(user.getLevelActivity() != null ? user.getLevelActivity() : 0.0);
+        response.setGoal(user.getGoal() != null ? user.getGoal() : 0.0);
+
+        response.setBmi(user.getBmi() != null ? user.getBmi() : 0.0);
+        response.setBmr(user.getBmr() != null ? user.getBmr() : 0.0);
+        response.setTdee(user.getTdee() != null ? user.getTdee() : 0.0);
+
         return response;
     }
+
 
     @Override
     public void updateProfile(String email, UpdateProfileForm form) {

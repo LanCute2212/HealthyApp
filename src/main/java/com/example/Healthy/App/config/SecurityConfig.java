@@ -38,15 +38,18 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/activities").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
-                        .anyRequest().permitAll()
+                                .anyRequest().permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/activities").permitAll()
+//                        .requestMatchers(HttpMethod.PUT, "/api/activities/{id}").authenticated()
+//                        .requestMatchers(HttpMethod.DELETE, "/api/activities/{id}").authenticated()
+//                        .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+//                        .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .formLogin(form -> form.disable());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

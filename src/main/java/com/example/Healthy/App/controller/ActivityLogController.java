@@ -7,6 +7,7 @@ import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.ActivityLogService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class ActivityLogController {
     public ActivityLogController(ActivityLogService activityLogService) {
         this.activityLogService = activityLogService;
     }
-
+    @PreAuthorize("hasAuthority('User')")
     @PostMapping
     public BaseResponse<ActivityLogDto> createActivityLog(@RequestBody LogActivityRequest requestDto) {
         ActivityLogDto createdActivityLog = activityLogService.createActivityLog(requestDto);
@@ -55,8 +56,7 @@ public class ActivityLogController {
                 .data(activityLog)
                 .build();
     }
-
-
+    @PreAuthorize("hasAuthority('User')")
     @PutMapping("/{id}")
     public BaseResponse<ActivityLogDto> updateActivityLog(@PathVariable Integer id, @RequestBody UpdateActivityLogRequest updateDto) {
         ActivityLogDto updatedActivityLog = activityLogService.updateActivityLog(id, updateDto);
@@ -67,8 +67,7 @@ public class ActivityLogController {
                 .data(updatedActivityLog)
                 .build();
     }
-
-
+    @PreAuthorize("hasAuthority('User')")
     @DeleteMapping("/{id}")
     public BaseResponse deleteActivityLog(@PathVariable Integer id) {
         activityLogService.deleteActivityLog(id);

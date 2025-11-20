@@ -41,11 +41,9 @@ public class LoginController {
               )
       );
 
-      // 2️⃣ Lưu thông tin người dùng vào SecurityContext
       SecurityContextHolder.getContext().setAuthentication(authentication);
       CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
 
-      // 3️⃣ Sinh JWT và Refresh Token
       String jwtToken = jwtUtil.generateToken(userDetails);
 
       List<String> roles = userDetails.getAuthorities()
@@ -53,7 +51,6 @@ public class LoginController {
               .map(r -> r.getAuthority())
               .collect(Collectors.toList());
 
-      // 4️⃣ Tạo response
       LoginResponse data = LoginResponse.builder()
               .userId(userDetails.getId())
               .email(userDetails.getUsername())

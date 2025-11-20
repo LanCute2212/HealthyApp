@@ -5,6 +5,7 @@ import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.WorkoutService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.List;
 public class WorkoutController {
     private final WorkoutService workoutService;
 
-    public WorkoutController(WorkoutService workoutService) {
+    public WorkoutController(WorkoutService workoutService){
         this.workoutService = workoutService;
     }
+
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
     public BaseResponse<WorkoutDto> createWorkout(@RequestBody WorkoutDto workoutDto){
         WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
@@ -47,6 +50,7 @@ public class WorkoutController {
                 .data(workout)
                 .build();
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/{id}")
     public BaseResponse<WorkoutDto> updateWorkout(@PathVariable Integer id, @RequestBody WorkoutDto workoutDto){
         WorkoutDto updatedWorkout = workoutService.updateWorkout(id, workoutDto);
@@ -57,6 +61,7 @@ public class WorkoutController {
                 .data(updatedWorkout)
                 .build();
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
     public BaseResponse deleteWorkout(@PathVariable Integer id){
         workoutService.deleteWorkout(id);

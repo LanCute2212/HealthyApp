@@ -62,9 +62,9 @@ public class User {
     @ToString.Exclude
     private List<FoodLog> foodLogs;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     @ToString.Exclude
-    private List<Blog> blogs;
+    private List<Post> posts;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

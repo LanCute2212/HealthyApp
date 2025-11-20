@@ -5,6 +5,7 @@ import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.DietService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class DietController {
                 .build();
     }
 
-
     @GetMapping("/{id}")
     public BaseResponse<DietDto> getDietByID(@PathVariable Integer id) {
         DietDto diet = dietService.getDietByID(id);
@@ -41,8 +41,7 @@ public class DietController {
                 .data(diet)
                 .build();
     }
-
-
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
     public BaseResponse<DietDto> createDiet(@RequestBody DietDto dietDto) {
         DietDto createdDiet = dietService.createDiet(dietDto);
@@ -53,7 +52,7 @@ public class DietController {
                 .data(createdDiet)
                 .build();
     }
-
+    @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/{id}")
     public BaseResponse<DietDto> updateDiet(@PathVariable Integer id, @RequestBody DietDto dietDto) {
         DietDto updatedDiet = dietService.updateDiet(id, dietDto);
@@ -64,7 +63,7 @@ public class DietController {
                 .data(updatedDiet)
                 .build();
     }
-
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
     public BaseResponse deleteDiet(@PathVariable Integer id) {
         dietService.deleteDiet(id);

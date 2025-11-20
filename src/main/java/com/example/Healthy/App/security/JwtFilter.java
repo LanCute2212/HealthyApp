@@ -86,11 +86,11 @@ public class JwtFilter extends OncePerRequestFilter{
             return; // Dừng lại
         }
 
-        // 7. Cho phép request tiếp tục chạy
+
         filterChain.doFilter(request, response);
     }
 
-    // Hàm helper để lấy token từ header
+
     public String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
@@ -99,18 +99,12 @@ public class JwtFilter extends OncePerRequestFilter{
         return null;
     }
 
-    // Hàm helper để gửi lỗi 401
+
     private void sendError(HttpServletResponse response, String message) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.getWriter().write("{\"status\": 401, \"error\": \"Unauthorized\", \"message\": \"" + message + "\"}");
     }
 
-    //
-    // --- KHÔNG CẦN CÁC HÀM CŨ NÀY NỮA ---
-    //
-    // public String parseJwt(String headerAuth) { ... }
-    //
-    // public String extractUsername(String headerAuth) { ... }
-    //
+
 }
