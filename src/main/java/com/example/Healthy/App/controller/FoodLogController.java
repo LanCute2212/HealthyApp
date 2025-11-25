@@ -4,6 +4,7 @@ import com.example.Healthy.App.dto.FoodLogDto;
 import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.service.FoodLogService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class FoodLogController {
     public FoodLogController(FoodLogService foodLogService) {
         this.foodLogService = foodLogService;
     }
+    @PreAuthorize("hasAuthority('User')")
     @GetMapping
     public BaseResponse<List<FoodLogDto>> getAllFoodLogs() {
         List<FoodLogDto> foodLogs = foodLogService.getAllFoodLogs();
@@ -27,6 +29,7 @@ public class FoodLogController {
                 .data(foodLogs)
                 .build();
     }
+    @PreAuthorize("hasAuthority('User')")
     @GetMapping("/{id}")
     public BaseResponse<FoodLogDto> getFoodLogById(@PathVariable Integer id) {
         FoodLogDto foodLog = foodLogService.getFoodLogByID(id);

@@ -1,6 +1,6 @@
 package com.example.Healthy.App.service;
 
-import com.example.Healthy.App.dto.LoginRequestDto;
+import com.example.Healthy.App.dto.request.LoginRequestDto;
 import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
 import com.example.Healthy.App.dto.request.ProfileForm;

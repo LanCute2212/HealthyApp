@@ -9,6 +9,8 @@ import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.UserService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +42,7 @@ public class UserController {
             .build();
   }
 
+  @PreAuthorize("hasAuthority('Admin')")
   @GetMapping
   public BaseResponse<List<UserDto>> getAllUsers() {
     List<UserDto> users = userService.getAllUsers();
@@ -50,7 +53,7 @@ public class UserController {
             .data(users)
             .build();
   }
-
+  @PreAuthorize("hasAuthority('Admin')")
   @GetMapping("/{id}")
   public BaseResponse<UserDto> getUserById(@PathVariable Integer id) {
     UserDto user = userService.getUserByID(id);
@@ -61,7 +64,20 @@ public class UserController {
             .data(user)
             .build();
   }
+  @PreAuthorize("hasAnyAuthority('User', 'Admin')")
+  @GetMapping("/me")
+  public BaseResponse<ProfileForm> getMyProfile() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    ProfileForm form = userService.getInforByEmail(email);
+    return BaseResponse.<ProfileForm>builder()
+            .status(HttpStatus.OK.value())
+            .error(false)
+            .message("Your profile")
+            .data(form)
+            .build();
+  }
 
+  @PreAuthorize("hasAuthority('User')")
   @PutMapping()
   public BaseResponse updateUser(@RequestParam(name = "email") String email,
                                           @RequestBody UserDto form) {
@@ -74,6 +90,7 @@ public class UserController {
             .build();
   }
 
+  @PreAuthorize("hasAuthority('User')")
   @PostMapping("/updateProfile")
   public BaseResponse<Object> updateProfile(@RequestParam String email,
                                             @RequestBody UpdateProfileForm form) {
@@ -85,7 +102,6 @@ public class UserController {
             .message(Status.UPDATED.getMessage())
             .build();
   }
-
   @GetMapping("/getInfor")
   public BaseResponse<ProfileForm> getInforByEmail(@RequestParam String email) {
     ProfileForm profile = userService.getInforByEmail(email);
@@ -96,7 +112,7 @@ public class UserController {
             .data(profile)
             .build();
   }
-
+  @PreAuthorize("hasAuthority('Admin')")
   @DeleteMapping("/{id}")
   public BaseResponse deleteUser(@PathVariable Integer id) {
     userService.deleteUser(id);

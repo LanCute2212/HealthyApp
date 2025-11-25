@@ -2,7 +2,6 @@ package com.example.Healthy.App.service.impl;
 
 import com.example.Healthy.App.dto.DietDto;
 import com.example.Healthy.App.mapper.DietMapper;
-import com.example.Healthy.App.model.Blog;
 import com.example.Healthy.App.model.Diet;
 import com.example.Healthy.App.repository.DietRepository;
 import com.example.Healthy.App.service.DietService;
@@ -18,13 +17,11 @@ public class DietServiceImpl implements DietService {
     @Override
     public List<DietDto> getAllDiets() {
         List<Diet> list = dietRepository.findAll();
-
         return dietRepository.findAll()
                 .stream()
                 .map(dietMapper::toDto)
                 .toList();
     }
-
     @Override
     public DietDto getDietByID(Integer id) {
         return dietRepository.findById(id)

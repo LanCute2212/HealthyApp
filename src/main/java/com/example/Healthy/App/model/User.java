@@ -6,7 +6,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Users")
@@ -56,19 +55,24 @@ public class User {
     private Double tdee;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<ActivityLog>  activityLogs;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<FoodLog> foodLogs;
 
-    @OneToMany(mappedBy = "user")
-    private List<Blog> blogs;
+    @OneToMany(mappedBy = "author")
+    @ToString.Exclude
+    private List<Post> posts;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
+    @ToString.Exclude
     private Role role;
 
     @ManyToMany
     @JoinTable(name = "user_workout", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "work_id"))
+    @ToString.Exclude
     private List<Workout> workouts;
 }

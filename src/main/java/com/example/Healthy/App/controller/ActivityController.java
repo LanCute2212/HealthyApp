@@ -8,6 +8,7 @@ import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.ActivityService;
 import com.example.Healthy.App.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ActivityController {
         this.activityService = activityService;
         this.userService = userService;
     }
+    @PreAuthorize("hasAuthority('User')")
     @PostMapping
     public BaseResponse createActivity(@RequestBody CreateActivityRequest createActivityRequest){
         ActivityDto createdActivity = activityService.createActivity(createActivityRequest);
@@ -32,7 +34,6 @@ public class ActivityController {
                 .data(createdActivity)
                 .build();
     }
-
     @GetMapping
     public BaseResponse<List<ActivityDto>> getAllActivities(@RequestParam Integer id){
         UserDto currentUserDto = userService.getUserByID(id);
@@ -44,7 +45,6 @@ public class ActivityController {
                 .data(activities)
                 .build();
     }
-
     @GetMapping("/{id}")
     public BaseResponse<ActivityDto> getActivityByID(@PathVariable Integer id){
         ActivityDto activity = activityService.getActivityByID(id);
@@ -55,7 +55,7 @@ public class ActivityController {
                 .data(activity)
                 .build();
     }
-
+    @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/{id}")
     public BaseResponse<ActivityDto> updateActivity(@PathVariable Integer id, @RequestBody ActivityDto activityDto){
         ActivityDto updateActivity = activityService.updateActivity(id, activityDto);
@@ -66,7 +66,7 @@ public class ActivityController {
                 .data(updateActivity)
                 .build();
     }
-
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
     public BaseResponse deleteActivity(@PathVariable Integer id){
         activityService.deleteActivity(id);

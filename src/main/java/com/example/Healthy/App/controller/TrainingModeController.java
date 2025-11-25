@@ -5,6 +5,7 @@ import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.TrainingModeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class TrainingModeController {
     public TrainingModeController(TrainingModeService trainingModeService){
         this.trainingModeService = trainingModeService;
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
     public BaseResponse<TrainingModeDto> createTrainingMode(@RequestBody TrainingModeDto trainingModeDto){
         TrainingModeDto createdMode = trainingModeService.createMode(trainingModeDto);
@@ -47,6 +49,7 @@ public class TrainingModeController {
                 .data(mode)
                 .build();
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/{id}")
     public BaseResponse<TrainingModeDto> updateMode(@PathVariable Integer id, @RequestBody TrainingModeDto trainingModeDto){
         TrainingModeDto updatedMode = trainingModeService.updateMode(id, trainingModeDto);
@@ -57,9 +60,10 @@ public class TrainingModeController {
                 .data(updatedMode)
                 .build();
     }
+    @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
     public BaseResponse deleteMode(@PathVariable Integer id){
-        trainingModeService.deleteMode(id); // Thêm dòng gọi service
+        trainingModeService.deleteMode(id);
         return BaseResponse.builder()
                 .status(Status.DELETED.getStatus())
                 .error(false)

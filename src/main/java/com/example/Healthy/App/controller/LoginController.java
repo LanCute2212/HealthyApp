@@ -1,34 +1,78 @@
 package com.example.Healthy.App.controller;
 
-import com.example.Healthy.App.dto.LoginRequestDto;
+import com.example.Healthy.App.dto.request.LoginRequestDto;
 import com.example.Healthy.App.dto.response.BaseResponse;
 import com.example.Healthy.App.dto.response.LoginResponse;
+import com.example.Healthy.App.security.CustomUserDetail;
+import com.example.Healthy.App.security.JwtUtil;
 import com.example.Healthy.App.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
 
-  private UserService userService;
+  @Autowired
+  private AuthenticationManager authenticationManager;
 
-  public LoginController(UserService userService) {
-    this.userService = userService;
-  }
+  @Autowired
+  private JwtUtil jwtUtil;
+
+  @Autowired
+  private UserService userService;
 
   @PostMapping
   public BaseResponse<LoginResponse> login(@RequestBody LoginRequestDto loginRequestDto) {
-    LoginResponse data = userService.loginUser(loginRequestDto);
+    try {
+      Authentication authentication = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                      loginRequestDto.getEmail(),
+                      loginRequestDto.getPassword()
+              )
+      );
 
-    return BaseResponse.<LoginResponse>builder()
-        .status(HttpStatus.OK.value())
-        .error(false)
-        .message("Login successfully")
-        .data(data)
-        .build();
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+
+      String jwtToken = jwtUtil.generateToken(userDetails);
+
+      List<String> roles = userDetails.getAuthorities()
+              .stream()
+              .map(r -> r.getAuthority())
+              .collect(Collectors.toList());
+
+      LoginResponse data = LoginResponse.builder()
+              .userId(userDetails.getId())
+              .email(userDetails.getUsername())
+              .jwtToken(jwtToken)
+              .roles(roles)
+              .build();
+
+      return BaseResponse.<LoginResponse>builder()
+              .status(HttpStatus.OK.value())
+              .error(false)
+              .message("Login successful!")
+              .data(data)
+              .build();
+
+    } catch (Exception e) {
+      return BaseResponse.<LoginResponse>builder()
+              .status(HttpStatus.UNAUTHORIZED.value())
+              .error(true)
+//              .message("Invalid username or password.")
+              .message(e.toString())
+              .data(null)
+              .build();
+    }
   }
 }

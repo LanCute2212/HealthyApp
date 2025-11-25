@@ -9,6 +9,8 @@ import lombok.*;
 @ToString
 @Setter
 public class DishDto {
+    private Integer id;
+
     private String name;
 
     private Double carb;
@@ -19,11 +21,15 @@ public class DishDto {
 
     private Double fiber;
 
-    private String foodPicture;
+    private String imageUrl;
 
     private Double calories;
 
     private String des;
 
     private Unit unit;
+
+    private String barcode;
+
+    private String servingSize;
 }

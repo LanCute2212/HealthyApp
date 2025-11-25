@@ -1,25 +1,27 @@
 package com.example.Healthy.App.model;
-import lombok.*;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name ="role")
-public class Role {
+@AllArgsConstructor
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    @ToString.Exclude
-    private List<User> user;
-}
+    @OneToMany(mappedBy = "category")
+    private List<Post> posts;
+ }

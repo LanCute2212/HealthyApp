@@ -1,4 +1,4 @@
-package com.example.Healthy.App.dto;
+package com.example.Healthy.App.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

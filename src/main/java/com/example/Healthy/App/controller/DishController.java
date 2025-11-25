@@ -2,9 +2,11 @@ package com.example.Healthy.App.controller;
 
 import com.example.Healthy.App.dto.DishDto;
 import com.example.Healthy.App.dto.response.BaseResponse;
+import com.example.Healthy.App.model.Dish;
 import com.example.Healthy.App.model.Status;
 import com.example.Healthy.App.service.DishService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +32,15 @@ public class DishController {
                 .build();
     }
 
+    @GetMapping("/barcode/{code}")
+    public ResponseEntity<BaseResponse<DishDto>> getDishByBarcode(@PathVariable String code) {
+        DishDto dishDto = dishService.getDishByBarcode(code);
+        return ResponseEntity.ok(BaseResponse.<DishDto>builder()
+                .status(200)
+                .error(false)
+                .data(dishDto)
+                .build());
+    }
     @GetMapping
     public BaseResponse<List<DishDto>> getAllDishes() {
         List<DishDto> dishes = dishService.getAllDishes();
@@ -62,7 +73,6 @@ public class DishController {
                 .data(updatedDish)
                 .build();
     }
-
     @DeleteMapping("/{id}")
     public BaseResponse deleteDish(@PathVariable Integer id) {
         dishService.deleteDish(id);

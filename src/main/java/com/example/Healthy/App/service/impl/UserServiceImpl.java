@@ -1,6 +1,6 @@
 package com.example.Healthy.App.service.impl;
 
-import com.example.Healthy.App.dto.LoginRequestDto;
+import com.example.Healthy.App.dto.request.LoginRequestDto;
 import com.example.Healthy.App.dto.RegisterDto;
 import com.example.Healthy.App.dto.UserDto;
 import com.example.Healthy.App.dto.request.ProfileForm;
@@ -11,6 +11,8 @@ import com.example.Healthy.App.model.Role;
 import com.example.Healthy.App.model.User;
 import com.example.Healthy.App.repository.UserRepository;
 import com.example.Healthy.App.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -48,19 +50,22 @@ public class UserServiceImpl implements UserService {
 
         ProfileForm response = new ProfileForm();
 
-        response.setName(user.getName());
+        response.setName(user.getName() != null ? user.getName() : "");
         response.setEmail(user.getEmail());
-        response.setAge(user.getAge());
-        response.setGender(user.getGender());
-        response.setWeight(user.getWeight());
-        response.setHeight(user.getHeight());
-        response.setActivityLevel(user.getLevelActivity());
-        response.setGoal(user.getGoal());
-        response.setBmi(user.getBmi());
-        response.setBmr(user.getBmr());
-        response.setTdee(user.getTdee());
+        response.setAge(user.getAge() != null ? user.getAge() : 0);
+        response.setGender(user.getGender() != null ? user.getGender() : "");
+        response.setWeight(user.getWeight() != null ? user.getWeight() : 0.0);
+        response.setHeight(user.getHeight() != null ? user.getHeight() : 0.0);
+        response.setActivityLevel(user.getLevelActivity() != null ? user.getLevelActivity() : 0.0);
+        response.setGoal(user.getGoal() != null ? user.getGoal() : 0.0);
+
+        response.setBmi(user.getBmi() != null ? user.getBmi() : 0.0);
+        response.setBmr(user.getBmr() != null ? user.getBmr() : 0.0);
+        response.setTdee(user.getTdee() != null ? user.getTdee() : 0.0);
+
         return response;
     }
+
 
     @Override
     public void updateProfile(String email, UpdateProfileForm form) {
@@ -94,7 +99,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(registerDto.getName());
         user.setEmail(registerDto.getEmail());
-        user.setPassword(registerDto.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         user.setRole(new Role(1, null, null));
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
