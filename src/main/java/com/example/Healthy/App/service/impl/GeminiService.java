@@ -28,14 +28,12 @@ public class GeminiService {
                         + "Thông tin người dùng: " + contextInfo + ". "
                         + "Hãy trả lời ngắn gọn, thân thiện: " + userMessage;
 
-        // 2. Build request JSON
         ObjectNode root = mapper.createObjectNode();
         ArrayNode contents = root.putArray("contents");
         ObjectNode contentNode = contents.addObject();
         ArrayNode partsArr = contentNode.putArray("parts");
         partsArr.addObject().put("text", finalPrompt);
 
-        // 3. Send request
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(root.toString(), headers);

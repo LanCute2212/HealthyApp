@@ -10,5 +10,5 @@ public interface DishService {
     DishDto createDish(DishDto dishDto);
     DishDto updateDish(Integer id, DishDto dishDto);
     void deleteDish(Integer id);
-    public DishDto getDishByBarcode(String barcode);
+    DishDto getDishByBarcode(String barcode);
 }

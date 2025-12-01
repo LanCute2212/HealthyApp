@@ -20,7 +20,7 @@ import java.util.Optional;
 public class DishServiceImpl implements DishService {
     private final DishRepository dishRepository;
     private final DishMapper dishMapper;
-    private final RestTemplate restTemplate = new RestTemplate(); // Để gọi API ngoài
+    private final RestTemplate restTemplate = new RestTemplate(); // goi api ngoai
     private final String OFF_API_URL = "https://world.openfoodfacts.org/api/v0/product/";
     @Override
     public List<DishDto> getAllDishes() {
@@ -55,29 +55,23 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public DishDto getDishByBarcode(String barcode) {
-        // BƯỚC 1: Kiểm tra "Hàng nhà" (Database Local)
         Optional<Dish> localDish = dishRepository.findByBarcode(barcode);
         if (localDish.isPresent()) {
-            // Tìm thấy -> Map sang DTO và trả về ngay
             return mapToDto(localDish.get());
         }
-        // BƯỚC 2: Ra "Chợ" (Gọi OpenFoodFacts API)
         String url = OFF_API_URL + barcode + ".json";
         try {
             OffResponse response = restTemplate.getForObject(url, OffResponse.class);
 
-            // Kiểm tra xem chợ có bán món này không (status == 1)
             if (response != null && response.getStatus() == 1 && response.getProduct() != null) {
 
                 OffProduct offProduct = response.getProduct();
 
                 Dish newDish = new Dish();
-                newDish.setBarcode(barcode); // Set mã vạch
+                newDish.setBarcode(barcode);
                 newDish.setName(offProduct.getProductName());
                 newDish.setImageUrl(offProduct.getImageUrl());
                 newDish.setServingSize(offProduct.getServingSize());
-
-
 
                 if (offProduct.getNutriments() != null) {
                     newDish.setCalories(offProduct.getNutriments().getCalories());
@@ -89,12 +83,11 @@ public class DishServiceImpl implements DishService {
 
                 Dish savedDish = dishRepository.save(newDish);
 
-                return mapToDto(savedDish);
+                return dishMapper.toDto(savedDish);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         throw new RuntimeException("Không tìm thấy sản phẩm với mã: " + barcode);
     }
     private DishDto mapToDto(Dish dish) {
@@ -118,8 +111,6 @@ public class DishServiceImpl implements DishService {
         if (dish.getUnit() != null) {
             dto.setUnit(dish.getUnit());
         }
-
-
         return dto;
     }
     @Override

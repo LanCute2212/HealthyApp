@@ -62,4 +62,16 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<BaseResponse<List<PostSummaryDto>>> getPostsByCategory(@PathVariable Integer categoryId) {
+        List<PostSummaryDto> list = postService.getPostsByCategory(categoryId);
+        BaseResponse<List<PostSummaryDto>> response = BaseResponse.<List<PostSummaryDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message("Get posts by category successfully")
+                .data(list)
+                .build();
+        return ResponseEntity.ok(response);
+    }
 }

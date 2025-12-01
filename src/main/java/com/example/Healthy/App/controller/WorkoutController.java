@@ -15,13 +15,13 @@ import java.util.List;
 public class WorkoutController {
     private final WorkoutService workoutService;
 
-    public WorkoutController(WorkoutService workoutService){
+    public WorkoutController(WorkoutService workoutService) {
         this.workoutService = workoutService;
     }
 
     @PreAuthorize("hasAuthority('Admin')")
     @PostMapping
-    public BaseResponse<WorkoutDto> createWorkout(@RequestBody WorkoutDto workoutDto){
+    public BaseResponse<WorkoutDto> createWorkout(@RequestBody WorkoutDto workoutDto) {
         WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
         return BaseResponse.<WorkoutDto>builder()
                 .status(HttpStatus.CREATED.value())
@@ -30,8 +30,9 @@ public class WorkoutController {
                 .data(createdWorkout)
                 .build();
     }
+
     @GetMapping
-    public BaseResponse<List<WorkoutDto>> getAllWorkouts(){
+    public BaseResponse<List<WorkoutDto>> getAllWorkouts() {
         List<WorkoutDto> workouts = workoutService.getAllWorkouts();
         return BaseResponse.<List<WorkoutDto>>builder()
                 .status(HttpStatus.OK.value())
@@ -40,8 +41,9 @@ public class WorkoutController {
                 .data(workouts)
                 .build();
     }
+
     @GetMapping("/{id}")
-    public BaseResponse<WorkoutDto> getWorkoutById(@PathVariable Integer id){
+    public BaseResponse<WorkoutDto> getWorkoutById(@PathVariable Integer id) {
         WorkoutDto workout = workoutService.getWorkoutById(id);
         return BaseResponse.<WorkoutDto>builder()
                 .status(HttpStatus.OK.value())
@@ -50,9 +52,21 @@ public class WorkoutController {
                 .data(workout)
                 .build();
     }
+
+    @GetMapping("/{trainingModeId}")
+    public BaseResponse<List<WorkoutDto>> getWorkoutsByTrainingModeId(@PathVariable Integer trainingModeId) {
+        List<WorkoutDto> workouts = workoutService.getWorkoutsByTrainingModeId(trainingModeId);
+        return BaseResponse.<List<WorkoutDto>>builder()
+                .status(HttpStatus.OK.value())
+                .error(false)
+                .message("Workouts retrieved successfully")
+                .data(workouts)
+                .build();
+    }
+
     @PreAuthorize("hasAuthority('Admin')")
     @PutMapping("/{id}")
-    public BaseResponse<WorkoutDto> updateWorkout(@PathVariable Integer id, @RequestBody WorkoutDto workoutDto){
+    public BaseResponse<WorkoutDto> updateWorkout(@PathVariable Integer id, @RequestBody WorkoutDto workoutDto) {
         WorkoutDto updatedWorkout = workoutService.updateWorkout(id, workoutDto);
         return BaseResponse.<WorkoutDto>builder()
                 .status(Status.UPDATED.getStatus())
@@ -61,9 +75,10 @@ public class WorkoutController {
                 .data(updatedWorkout)
                 .build();
     }
+
     @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
-    public BaseResponse deleteWorkout(@PathVariable Integer id){
+    public BaseResponse deleteWorkout(@PathVariable Integer id) {
         workoutService.deleteWorkout(id);
         return BaseResponse.builder()
                 .status(Status.DELETED.getStatus())

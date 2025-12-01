@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true) // Bỏ qua các trường thừa
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public class OffProduct {
 
     @JsonProperty("product_name")

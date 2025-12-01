@@ -42,7 +42,6 @@ public class UserController {
             .build();
   }
 
-  @PreAuthorize("hasAuthority('Admin')")
   @GetMapping
   public BaseResponse<List<UserDto>> getAllUsers() {
     List<UserDto> users = userService.getAllUsers();
@@ -53,7 +52,6 @@ public class UserController {
             .data(users)
             .build();
   }
-  @PreAuthorize("hasAuthority('Admin')")
   @GetMapping("/{id}")
   public BaseResponse<UserDto> getUserById(@PathVariable Integer id) {
     UserDto user = userService.getUserByID(id);
@@ -64,7 +62,6 @@ public class UserController {
             .data(user)
             .build();
   }
-  @PreAuthorize("hasAnyAuthority('User', 'Admin')")
   @GetMapping("/me")
   public BaseResponse<ProfileForm> getMyProfile() {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -89,8 +86,6 @@ public class UserController {
             .data(updatedUser)
             .build();
   }
-
-  @PreAuthorize("hasAuthority('User')")
   @PostMapping("/updateProfile")
   public BaseResponse<Object> updateProfile(@RequestParam String email,
                                             @RequestBody UpdateProfileForm form) {

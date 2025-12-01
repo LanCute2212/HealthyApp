@@ -51,7 +51,6 @@ public class DishController {
                 .data(dishes)
                 .build();
     }
-
     @GetMapping("/{id}")
     public BaseResponse<DishDto> getDishById(@PathVariable Integer id) {
         DishDto dish = dishService.getDishByID(id);
@@ -62,7 +61,6 @@ public class DishController {
                 .data(dish)
                 .build();
     }
-
     @PutMapping("/{id}")
     public BaseResponse<DishDto> updateDish(@PathVariable Integer id, @RequestBody DishDto dishDto) {
         DishDto updatedDish = dishService.updateDish(id, dishDto);

@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final WorkoutMapper workoutMapper;
+
     @Override
     public List<WorkoutDto> getAllWorkouts() {
         return workoutRepository.findAll()
@@ -22,7 +24,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto getWorkoutById(Integer id) {
-        return workoutRepository.findById(id).map(workoutMapper::toDto).orElseThrow(()->new RuntimeException("Workout not found"));
+        return workoutRepository.findById(id).map(workoutMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Workout not found"));
     }
 
     @Override
@@ -34,10 +37,18 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto updateWorkout(Integer id, WorkoutDto workoutDto) {
-        Workout workout = workoutRepository.findById(id).orElseThrow(()->new RuntimeException("Workout not found"));
+        Workout workout = workoutRepository.findById(id).orElseThrow(() -> new RuntimeException("Workout not found"));
         workoutMapper.updateWorkoutFromDto(workoutDto, workout);
         Workout updatedWorkout = workoutRepository.save(workout);
         return workoutMapper.toDto(updatedWorkout);
+    }
+
+    @Override
+    public List<WorkoutDto> getWorkoutsByTrainingModeId(Integer trainingModeId) {
+        return workoutRepository.findByTrainingModeId(trainingModeId)
+                .stream()
+                .map(workoutMapper::toDto)
+                .toList();
     }
 
     @Override

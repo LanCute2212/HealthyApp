@@ -11,6 +11,7 @@ import com.example.Healthy.App.repository.CategoryRepository;
 import com.example.Healthy.App.repository.PostRepository;
 import com.example.Healthy.App.repository.UserRepository;
 import com.example.Healthy.App.service.PostService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,25 @@ public class PostServiceImpl implements PostService {
         Post savedPost = postRepository.save(post);
 
         return postMapper.toDetailDto(savedPost);
+    }
+    @Override
+    public PostDetailDto updatePost(Integer id, CreatePostRequest request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setImageUrl(request.getImageUrl());
+        Post updatedPost = postRepository.save(post);
+        return postMapper.toDetailDto(updatedPost);
+    }
+
+    @Override
+    public List<PostSummaryDto> getPostsByCategory(Integer categoryId) {
+        List<Post> posts = postRepository.findByCategoryIdOrderByCreatedAtDesc(categoryId);
+        return posts.stream().map(postMapper::toSummaryDto).collect(Collectors.toList());
+    }
+    @Override
+    public void deletePost(Integer id) {
+        postRepository.deleteById(id);
     }
 }

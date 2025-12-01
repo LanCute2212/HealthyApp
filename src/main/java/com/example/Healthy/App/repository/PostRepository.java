@@ -1,6 +1,7 @@
 package com.example.Healthy.App.repository;
 
 import com.example.Healthy.App.model.Post;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -12,4 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByAuthorId(Integer authorId);
 
     List<Post> findAllByOrderByCreatedAtDesc();
+
+    List<Post> findByCategoryIdOrderByCreatedAtDesc(Integer categoryId);
+
 }

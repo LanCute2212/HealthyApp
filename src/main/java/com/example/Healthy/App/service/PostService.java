@@ -12,4 +12,10 @@ public interface PostService {
     PostDetailDto getPostDetail(Integer id);
 
     PostDetailDto createPost(CreatePostRequest request, Integer authorId);
+
+    PostDetailDto updatePost(Integer id, CreatePostRequest request);
+
+    List<PostSummaryDto> getPostsByCategory(Integer categoryId);
+
+    void deletePost(Integer id);
 }
