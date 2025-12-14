@@ -53,7 +53,7 @@ public class WorkoutController {
                 .build();
     }
 
-    @GetMapping("/{trainingModeId}")
+    @GetMapping("/trainingModes/{trainingModeId}")
     public BaseResponse<List<WorkoutDto>> getWorkoutsByTrainingModeId(@PathVariable Integer trainingModeId) {
         List<WorkoutDto> workouts = workoutService.getWorkoutsByTrainingModeId(trainingModeId);
         return BaseResponse.<List<WorkoutDto>>builder()

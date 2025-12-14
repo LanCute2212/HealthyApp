@@ -9,6 +9,8 @@ import lombok.*;
 @ToString
 public class TrainingModeDto {
 
+    private Long id;
+
     private String name;
 
     private int duration;
